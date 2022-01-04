@@ -26,6 +26,7 @@ architecture vunit_simulation of tb_counter is
     -- simulation specific signals ----
 
     signal counter : counter_object_record := init_counter;
+    signal slow_counter : counter_object_record := init_counter;
 
 begin
 
@@ -58,7 +59,14 @@ begin
     begin
         if rising_edge(simulator_clock) then
             simulation_counter <= simulation_counter + 1;
-            create_timebase_from(counter, 10);
+
+            create_timebase_from(counter, 3);
+
+            if counter_is_ready(counter) then
+                create_timebase_from(slow_counter, 5);
+            end if;
+                
+
 
         end if; -- rising_edge
     end process stimulus;	

@@ -19,6 +19,9 @@ package counter_pkg is
     function counter_is_not_running ( counter_object : counter_object_record)
         return boolean;
 
+    function counter_is_ready ( counter_object : counter_object_record)
+        return boolean;
+
     procedure request_counter (
         signal counter_object : out counter_object_record ;
         count_down_from : in natural range 1 to 2**16-1);
@@ -51,6 +54,17 @@ package body counter_pkg is
                 counting_has_completed <= false;
             end if;
     end create_counter;
+
+------------------------------------------------------------------------
+    function counter_is_ready
+    (
+        counter_object : counter_object_record
+    )
+    return boolean
+    is
+    begin
+        return counter_object.counting_has_completed;
+    end counter_is_ready;
 
 ------------------------------------------------------------------------
     function counter_is_not_running
