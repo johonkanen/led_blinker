@@ -14,6 +14,9 @@ package led_blinker_pkg is
     
     constant init_led_blinker : led_blinker_record := (init_counter, init_counter, '0');
 
+    type led_array is array (integer range <>) of led_blinker_record;
+    type int_array is array (integer range <>) of integer;
+
     procedure create_led_blinker (
         signal led_blinker_object : inout led_blinker_record;
         signal led_out : out std_logic;

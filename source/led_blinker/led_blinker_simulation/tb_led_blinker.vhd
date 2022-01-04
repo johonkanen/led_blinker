@@ -4,7 +4,6 @@ LIBRARY ieee  ;
     use ieee.math_real.all;
 
 library work;
-    use work.counter_pkg.all;
     use work.led_blinker_pkg.all;
 
 library vunit_lib;

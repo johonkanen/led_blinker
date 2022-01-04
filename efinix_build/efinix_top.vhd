@@ -15,14 +15,10 @@ end entity top;
 
 architecture rtl of top is
 
-    type led_array is array (integer range leds'range) of led_blinker_record;
-    signal led_blinker_array : led_array := ((others => init_led_blinker));
-
-    type int_array is array (integer range <>) of integer;
+    signal led_blinker_array : led_array(leds'range) := (init_led_blinker, init_led_blinker, init_led_blinker, init_led_blinker);
     constant counter_values : int_array(leds'range) := (4000, 6000, 8000, 2000);
 
 begin
-
 
     led_blinker : process(clk_120MHz)
         
