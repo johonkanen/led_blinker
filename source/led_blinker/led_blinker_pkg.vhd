@@ -6,6 +6,7 @@ library work;
     use work.counter_pkg.all;
 
 package led_blinker_pkg is
+
     type led_blinker_record is record
         fast_counter : counter_object_record;
         slow_counter : counter_object_record;
@@ -30,12 +31,12 @@ package body led_blinker_pkg is
     procedure create_led_blinker
     (
         signal led_blinker_object : inout led_blinker_record;
-        signal led_out : out std_logic;
-        slow_counter_value : in natural range 1000 to 15e3
+        signal led_out            : out std_logic;
+        slow_counter_value        : in natural range 1000 to 15e3
     ) is
-        alias counter is led_blinker_object.fast_counter;
-        alias counter2 is led_blinker_object.slow_counter;
-        alias led_state    is led_blinker_object.led_state   ;
+        alias counter   is led_blinker_object.fast_counter;
+        alias counter2  is led_blinker_object.slow_counter;
+        alias led_state is led_blinker_object.led_state   ;
 
     begin
             led_out <= led_state;
