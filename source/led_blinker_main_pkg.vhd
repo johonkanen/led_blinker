@@ -2,10 +2,14 @@ library ieee;
     use ieee.std_logic_1164.all;
     use ieee.numeric_std.all;
 
+library work;
+    use work.uart_pkg.all;
+
 package led_blinker_main_pkg is
 
     type led_blinker_main_FPGA_output_group is record
         leds : std_logic_vector(3 downto 0);
+        uart_FPGA_out : uart_FPGA_output_group;
     end record;
     
     component led_blinker_main is
