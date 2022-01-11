@@ -8,7 +8,8 @@ library work;
 entity top is
     port (
         clk50mhz : in std_logic;
-        leds : out std_logic_vector(3 downto 0)
+        led_blinker_main_FPGA_in : in led_blinker_main_FPGA_input_group;
+        led_blinker_main_FPGA_out : out led_blinker_main_FPGA_output_group
     );
 end entity top;
 
@@ -24,17 +25,12 @@ architecture rtl of top is
 
     signal clk_120MHz : std_logic; 
 
-    signal led_blinker_main_FPGA_out : led_blinker_main_FPGA_output_group;
-
 begin
 
     u_main_pll : main_pll
     port map(clk50mhz, clk_120MHz);
 
-    leds <= led_blinker_main_FPGA_out.leds;
-
     u_led_blinker_main : led_blinker_main
-    port map( clk_120MHz, led_blinker_main_FPGA_out);
-
+    port map( clk_120MHz, led_blinker_main_FPGA_in, led_blinker_main_FPGA_out);
 
 end rtl;

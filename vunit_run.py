@@ -15,6 +15,7 @@ lib.add_source_files(ROOT / "source/counter/counter_simulation" / "*.vhd")
 lib.add_source_files(ROOT / "source/led_blinker" / "*.vhd")
 lib.add_source_files(ROOT / "source/led_blinker/led_blinker_simulation" / "*.vhd") 
 
+lib.add_source_files(ROOT / "source/filter" / "*.vhd")
 lib.add_source_files(ROOT / "source/filter/filter_simulation" / "*.vhd")
 
 VU.main()

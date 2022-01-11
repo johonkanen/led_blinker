@@ -11,11 +11,16 @@ package led_blinker_main_pkg is
         leds : std_logic_vector(3 downto 0);
         uart_FPGA_out : uart_FPGA_output_group;
     end record;
+
+    type led_blinker_main_FPGA_input_group is record
+        uart_FPGA_in : uart_FPGA_input_group;
+    end record;
     
     component led_blinker_main is
         port (
             clk_120MHz : in std_logic;
-            led_blinker_main_FPGA_out : out led_blinker_main_FPGA_output_group 
+            led_blinker_main_FPGA_in : in led_blinker_main_FPGA_input_group ;
+            led_blinker_main_FPGA_out : out led_blinker_main_FPGA_output_group
         );
     end component led_blinker_main;
     

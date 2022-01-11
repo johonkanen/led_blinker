@@ -101,6 +101,7 @@ if {$make_assignments} {
 	set_location_assignment PIN_J14 -to led_blinker_main_FPGA_out.leds[1]
 	set_location_assignment PIN_J13 -to led_blinker_main_FPGA_out.leds[2]
 	set_location_assignment PIN_K15 -to led_blinker_main_FPGA_out.leds[3]
+    set_location_assignment PIN_R1 -to led_blinker_main_FPGA_in.uart_FPGA_in.uart_transreceiver_FPGA_in.uart_rx_FPGA_in.uart_rx
 	set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led_blinker_main_FPGA_out.leds[3]
 	set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led_blinker_main_FPGA_out.leds[2]
 	set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led_blinker_main_FPGA_out.leds[1]

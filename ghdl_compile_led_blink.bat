@@ -10,6 +10,8 @@ SET source=%project_root%/source
         ghdl -a --ieee=synopsys %source%/uart/uart_transreceiver/uart_transreceiver_pkg.vhd
     ghdl -a --ieee=synopsys %source%/uart/uart_pkg.vhd
 
+    ghdl -a --ieee=synopsys %source%/filter/filter_pkg.vhd
+
     ghdl -a --ieee=synopsys %source%/counter/counter_pkg.vhd
     ghdl -a --ieee=synopsys %source%/led_blinker/led_blinker_pkg.vhd
 
