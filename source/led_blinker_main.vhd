@@ -23,7 +23,7 @@ architecture rtl of led_blinker_main is
 
     signal leds : std_logic_vector(led_blinker_main_FPGA_out.leds'range) := (others => '0');
     signal led_blinker_array : led_array(leds'range) := (init_led_blinker, init_led_blinker, init_led_blinker, init_led_blinker);
-    constant counter_values : int_array(leds'range) := (4000, 6000, 8000, 2000);
+    constant counter_values : int_array(leds'range) := (2000, 4000, 6000, 8000);
 
     signal uart_clocks   : uart_clock_group;
     signal uart_FPGA_out : uart_FPGA_output_group;
@@ -31,16 +31,22 @@ architecture rtl of led_blinker_main is
     signal uart_data_out : uart_data_output_group;
 
     signal counter : counter_object_record := init_counter;
-    signal stimulus_counter : natural range 0 to 2**6-1 := 0;
+    signal stimulus_counter : natural range 0 to 2**8-1 := 0;
 
-    signal filter : filter_record := set_filter_gain(0.10);
-    signal data_from_uart : integer range 0 to 2**16-1 := 0;
+    signal data_from_uart : int18 range 0 to 2**16-1 := 0;
+
+    signal filter : filter_record := init_filter;
+    signal filter2 : filter_record := init_filter;
+
+    signal square_signal : int18 range 0 to 2**16 := 0;
 
 begin
 
+------------------------------------------------------------------------
     led_blinker_main_FPGA_out <= (leds         => leds,
                                  uart_FPGA_out => uart_FPGA_out);
 
+------------------------------------------------------------------------
     led_blinker : process(clk_120MHz)
     begin
         if rising_edge(clk_120MHz) then
@@ -50,24 +56,37 @@ begin
             create_led_blinker(led_blinker_array(2), leds(2), counter_values(2));
             create_led_blinker(led_blinker_array(3), leds(3), counter_values(3));
 
+            create_filter(filter);
+            create_filter(filter2);
+
             init_uart(uart_data_in);
             receive_data_from_uart(uart_data_out, data_from_uart);
 
             create_timebase_from(counter, 1200);
 
             if counter_is_ready(counter) then
-                transmit_16_bit_word_with_uart(uart_data_in, get_filter_output(filter));
                 stimulus_counter <= stimulus_counter + 1;
-                CASE stimulus_counter is
-                    WHEN 0 => request_filter(filter, 0);
-                    WHEN 31 => request_filter(filter, data_from_uart);
-                    WHEN others => -- do nothing
-                end CASE;
+                CASE data_from_uart is
+                    WHEN 0 => 
+                        request_filter(filter, square_signal);
+                    WHEN others =>
+                        request_filter(filter, data_from_uart);
+                end CASE; --data_from_uart
 
-                create_filter(filter);
+                square_signal <= 15e3;
+                if stimulus_counter > 2**7 then
+                    square_signal <= 5e3;
+                end if;
                     
             end if;
 
+            if filter_is_ready(filter) then
+                request_filter(filter2, get_filter_output(filter));
+            end if;
+
+            if filter_is_ready(filter2) then
+                transmit_16_bit_word_with_uart(uart_data_in, get_filter_output(filter2));
+            end if;
 
         end if; --rising_edge
     end process led_blinker;	

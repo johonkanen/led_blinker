@@ -76,21 +76,6 @@ if {$make_assignments} {
 	set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 	set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 	set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_tx/uart_tx_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_tx/uart_tx.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_rx/uart_rx_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_rx/uart_rx.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_transreceiver_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_transreceiver.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/filter/filter_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/led_blinker_main_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/led_blinker_main.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../cyclone_build/cyclone_top.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/led_blinker/led_blinker_pkg.vhd
-	set_global_assignment -name VHDL_FILE $tcl_directory/../source/counter/counter_pkg.vhd
-	set_global_assignment -name QIP_FILE $tcl_directory/../cyclone_build/ip/main_pll/main_pll.qip
 	set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to leds[3]
 	set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to leds[2]
 	set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to leds[1]
@@ -112,10 +97,26 @@ if {$make_assignments} {
 	set_location_assignment PIN_P1 -to led_blinker_main_FPGA_out.uart_FPGA_out.uart_transreceiver_FPGA_out.uart_tx_FPGA_out.uart_tx
 	set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 
+	set_global_assignment -name QIP_FILE $tcl_directory/../cyclone_build/ip/main_pll/main_pll.qip
+
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/filter/filter_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_tx/uart_tx_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_tx/uart_tx.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_rx/uart_rx_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_rx/uart_rx.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_transreceiver_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_transreceiver/uart_transreceiver.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/uart/uart.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/led_blinker_main_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/led_blinker_main.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../cyclone_build/cyclone_top.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/led_blinker/led_blinker_pkg.vhd
+	set_global_assignment -name VHDL_FILE $tcl_directory/../source/counter/counter_pkg.vhd
+
+    set_global_assignment -name SDC_FILE $tcl_directory/led_blinker.out.sdc
 	# Commit assignments
 	export_assignments
-
-
     execute_flow -compile 
 
 	# Close project

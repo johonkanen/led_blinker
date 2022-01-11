@@ -87,6 +87,9 @@ set_clock_uncertainty -fall_from [get_clocks {u_main_pll|altpll_component|auto_g
 # Set False Path
 #**************************************************************
 
+set_false_path -from * -to [get_ports *led*]
+set_false_path -from * -to [get_ports *uart_tx*]
+set_false_path -from [get_ports *uart_rx*] -to *
 
 
 #**************************************************************

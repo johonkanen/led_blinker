@@ -15,7 +15,14 @@ lib.add_source_files(ROOT / "source/counter/counter_simulation" / "*.vhd")
 lib.add_source_files(ROOT / "source/led_blinker" / "*.vhd")
 lib.add_source_files(ROOT / "source/led_blinker/led_blinker_simulation" / "*.vhd") 
 
-lib.add_source_files(ROOT / "source/filter" / "*.vhd")
-lib.add_source_files(ROOT / "source/filter/filter_simulation" / "*.vhd")
+lib.add_source_files(ROOT / "source/uart" / "*.vhd")
+lib.add_source_files(ROOT / "source/uart/simulation" / "*.vhd")
+lib.add_source_files(ROOT / "source/uart/uart_transreceiver" / "*.vhd")
+lib.add_source_files(ROOT / "source/uart/uart_transreceiver/uart_rx" / "*.vhd")
+lib.add_source_files(ROOT / "source/uart/uart_transreceiver/uart_tx" / "*.vhd")
+
+
+lib.add_source_files(ROOT / "source/filter" /"*.vhd")
+lib.add_source_files(ROOT / "source/filter/filter_simulation" /"*.vhd")
 
 VU.main()
