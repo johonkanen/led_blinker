@@ -8,6 +8,7 @@ library work;
     use work.led_blinker_main_pkg.all;
     use work.uart_pkg.all;
     use work.counter_pkg.all;
+    use work.filter_pkg.all;
 
 entity led_blinker_main is
     port (
@@ -34,6 +35,9 @@ architecture rtl of led_blinker_main is
 
     signal data_from_uart : integer range 0 to 2**16-1 := 0;
 
+    signal filter : filter_record := init_filter; 
+    signal filter2 : filter_record := init_filter; 
+
 begin
 
 ------------------------------------------------------------------------
@@ -51,6 +55,9 @@ begin
             create_led_blinker(led_blinker_array(2), leds(2), counter_values(2));
             create_led_blinker(led_blinker_array(3), leds(3), counter_values(3));
 
+            create_filter(filter);
+            create_filter(filter2);
+
             init_uart(uart_data_in);
             -- application region
             receive_data_from_uart(uart_data_out, data_from_uart);
@@ -60,9 +67,24 @@ begin
             if counter_is_ready(counter) then
                 stimulus_counter <= stimulus_counter + 1;
 
-                transmit_16_bit_word_with_uart(uart_data_in, data_from_uart);
-                    
+                if stimulus_counter > 2**7 then
+                    request_filter(filter, 44252);
+                else
+                    request_filter(filter, 0);
+                end if;
+
+                set_filter_constant(filter, data_from_uart);
+                set_filter_constant(filter2, data_from_uart);
             end if;
+
+            if filter_is_ready(filter) then
+                request_filter(filter2, get_filter_output(filter));
+            end if;
+
+            if filter_is_ready(filter2) then
+                transmit_16_bit_word_with_uart(uart_data_in, get_filter_output(filter2));
+            end if;
+
 
         end if; --rising_edge
     end process led_blinker;	
