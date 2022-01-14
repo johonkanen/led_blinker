@@ -8,7 +8,6 @@ library work;
     use work.led_blinker_main_pkg.all;
     use work.uart_pkg.all;
     use work.counter_pkg.all;
-    use work.filter_pkg.all;
 
 entity led_blinker_main is
     port (
@@ -33,12 +32,7 @@ architecture rtl of led_blinker_main is
     signal counter : counter_object_record := init_counter;
     signal stimulus_counter : natural range 0 to 2**8-1 := 0;
 
-    signal data_from_uart : int18 range 0 to 2**16-1 := 0;
-
-    signal filter : filter_record := init_filter;
-    signal filter2 : filter_record := init_filter;
-
-    signal square_signal : int18 range 0 to 2**16 := 0;
+    signal data_from_uart : integer range 0 to 2**16-1 := 0;
 
 begin
 
@@ -56,9 +50,6 @@ begin
             create_led_blinker(led_blinker_array(2), leds(2), counter_values(2));
             create_led_blinker(led_blinker_array(3), leds(3), counter_values(3));
 
-            create_filter(filter);
-            create_filter(filter2);
-
             init_uart(uart_data_in);
             receive_data_from_uart(uart_data_out, data_from_uart);
 
@@ -66,26 +57,9 @@ begin
 
             if counter_is_ready(counter) then
                 stimulus_counter <= stimulus_counter + 1;
-                CASE data_from_uart is
-                    WHEN 0 => 
-                        request_filter(filter, square_signal);
-                    WHEN others =>
-                        request_filter(filter, data_from_uart);
-                end CASE; --data_from_uart
 
-                square_signal <= 15e3;
-                if stimulus_counter > 2**7 then
-                    square_signal <= 5e3;
-                end if;
+                transmit_16_bit_word_with_uart(uart_data_in, data_from_uart);
                     
-            end if;
-
-            if filter_is_ready(filter) then
-                request_filter(filter2, get_filter_output(filter));
-            end if;
-
-            if filter_is_ready(filter2) then
-                transmit_16_bit_word_with_uart(uart_data_in, get_filter_output(filter2));
             end if;
 
         end if; --rising_edge
