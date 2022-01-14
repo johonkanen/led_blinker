@@ -45,16 +45,18 @@ begin
     begin
         if rising_edge(clk_120MHz) then
 
+            -- object creation region
             create_led_blinker(led_blinker_array(0), leds(0), counter_values(0));
             create_led_blinker(led_blinker_array(1), leds(1), counter_values(1));
             create_led_blinker(led_blinker_array(2), leds(2), counter_values(2));
             create_led_blinker(led_blinker_array(3), leds(3), counter_values(3));
 
             init_uart(uart_data_in);
+            -- application region
             receive_data_from_uart(uart_data_out, data_from_uart);
 
+            -- run at 100kHz
             create_timebase_from(counter, 1200);
-
             if counter_is_ready(counter) then
                 stimulus_counter <= stimulus_counter + 1;
 
