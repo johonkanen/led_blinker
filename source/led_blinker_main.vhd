@@ -35,8 +35,52 @@ architecture rtl of led_blinker_main is
 
     signal data_from_uart : integer range 0 to 2**16-1 := 0;
 
-    signal filter : filter_record := init_filter; 
-    signal filter2 : filter_record := init_filter; 
+    signal filter1 : filter_record  := init_filter;
+    signal filter2 : filter_record := init_filter;
+    signal filter3 : filter_record := init_filter;
+    signal filter4 : filter_record := init_filter;
+    signal filter5 : filter_record := init_filter;
+    signal filter6 : filter_record := init_filter;
+    signal filter7 : filter_record := init_filter;
+    signal filter8 : filter_record := init_filter;
+    signal filter9 : filter_record := init_filter;
+    signal filter10 : filter_record := init_filter;
+    signal filter11 : filter_record := init_filter;
+    signal filter12 : filter_record := init_filter;
+    signal filter13 : filter_record := init_filter;
+    signal filter14 : filter_record := init_filter;
+    signal filter15 : filter_record := init_filter;
+    signal filter16 : filter_record := init_filter;
+    signal filter17 : filter_record := init_filter;
+    signal filter18 : filter_record := init_filter;
+    signal filter19 : filter_record := init_filter;
+    signal filter20 : filter_record := init_filter;
+    signal filter21 : filter_record := init_filter;
+    signal filter22 : filter_record := init_filter;
+    signal filter23 : filter_record := init_filter;
+    signal filter24 : filter_record := init_filter;
+    signal filter25 : filter_record := init_filter;
+    signal filter26 : filter_record := init_filter;
+    signal filter27 : filter_record := init_filter;
+    signal filter28 : filter_record := init_filter;
+    signal filter29 : filter_record := init_filter;
+    signal filter30 : filter_record := init_filter;
+
+    signal multiplier : multiplier_record := init_multiplier;
+    signal multiplier2 : multiplier_record := init_multiplier;
+
+    procedure cascade_filters
+    (
+        signal filter_n : inout filter_record;
+        signal filter_n1 : inout filter_record
+    ) is
+    begin
+
+        if filter_is_ready(filter_n) then
+            request_filter(filter_n1, get_filter_output(filter_n));
+        end if;
+        
+    end cascade_filters;
 
 begin
 
@@ -55,8 +99,38 @@ begin
             create_led_blinker(led_blinker_array(2), leds(2), counter_values(2));
             create_led_blinker(led_blinker_array(3), leds(3), counter_values(3));
 
-            create_filter(filter);
-            create_filter(filter2);
+            create_multiplier(multiplier);
+            create_multiplier(multiplier2);
+            create_filter(filter1  , multiplier);
+            create_filter(filter2 , multiplier);
+            create_filter(filter3 , multiplier);
+            create_filter(filter4 , multiplier);
+            create_filter(filter5 , multiplier);
+            create_filter(filter6 , multiplier);
+            create_filter(filter7 , multiplier);
+            create_filter(filter8 , multiplier);
+            create_filter(filter9 , multiplier);
+            create_filter(filter10 , multiplier);
+            create_filter(filter11 , multiplier);
+            create_filter(filter12 , multiplier);
+            create_filter(filter13 , multiplier);
+            create_filter(filter14 , multiplier);
+            create_filter(filter15 , multiplier);
+            create_filter(filter16 , multiplier);
+            create_filter(filter17 , multiplier);
+            create_filter(filter18 , multiplier);
+            create_filter(filter19 , multiplier);
+            create_filter(filter20 , multiplier);
+            create_filter(filter21 , multiplier);
+            create_filter(filter22 , multiplier);
+            create_filter(filter23 , multiplier);
+            create_filter(filter24 , multiplier);
+            create_filter(filter25 , multiplier2);
+            create_filter(filter26 , multiplier2);
+            create_filter(filter27 , multiplier2);
+            create_filter(filter28 , multiplier2);
+            create_filter(filter29 , multiplier2);
+            create_filter(filter30 , multiplier2);
 
             init_uart(uart_data_in);
             -- application region
@@ -68,21 +142,75 @@ begin
                 stimulus_counter <= stimulus_counter + 1;
 
                 if stimulus_counter > 2**7 then
-                    request_filter(filter, 44252);
+                    request_filter(filter1, 44252);
                 else
-                    request_filter(filter, 0);
+                    request_filter(filter1, 0);
                 end if;
 
-                set_filter_constant(filter, data_from_uart);
+                set_filter_constant(filter1, data_from_uart);
                 set_filter_constant(filter2, data_from_uart);
+                set_filter_constant(filter3, data_from_uart);
+                set_filter_constant(filter4, data_from_uart);
+                set_filter_constant(filter5, data_from_uart);
+                set_filter_constant(filter6, data_from_uart);
+                set_filter_constant(filter7, data_from_uart);
+                set_filter_constant(filter8, data_from_uart);
+                set_filter_constant(filter9, data_from_uart);
+                set_filter_constant(filter10, data_from_uart);
+                set_filter_constant(filter11, data_from_uart);
+                set_filter_constant(filter12, data_from_uart);
+                set_filter_constant(filter13, data_from_uart);
+                set_filter_constant(filter14, data_from_uart);
+                set_filter_constant(filter15, data_from_uart);
+                set_filter_constant(filter16, data_from_uart);
+                set_filter_constant(filter17, data_from_uart);
+                set_filter_constant(filter18, data_from_uart);
+                set_filter_constant(filter19, data_from_uart);
+                set_filter_constant(filter20, data_from_uart);
+                set_filter_constant(filter21, data_from_uart);
+                set_filter_constant(filter22, data_from_uart);
+                set_filter_constant(filter23, data_from_uart);
+                set_filter_constant(filter24, data_from_uart);
+                set_filter_constant(filter25, data_from_uart);
+                set_filter_constant(filter26, data_from_uart);
+                set_filter_constant(filter27, data_from_uart);
+                set_filter_constant(filter28, data_from_uart);
+                set_filter_constant(filter29, data_from_uart);
+                set_filter_constant(filter30, data_from_uart);
             end if;
 
-            if filter_is_ready(filter) then
-                request_filter(filter2, get_filter_output(filter));
-            end if;
+            cascade_filters(filter1, filter2);
+            cascade_filters(filter2, filter3);
+            cascade_filters(filter3, filter4);
+            cascade_filters(filter4, filter5);
+            cascade_filters(filter5, filter6);
+            cascade_filters(filter6, filter7);
+            cascade_filters(filter7, filter8);
+            cascade_filters(filter8, filter9);
+            cascade_filters(filter9, filter10);
+            cascade_filters(filter10, filter11);
+            cascade_filters(filter11, filter12);
+            cascade_filters(filter12, filter13);
+            cascade_filters(filter13, filter14);
+            cascade_filters(filter14, filter15);
+            cascade_filters(filter15, filter16);
+            cascade_filters(filter16, filter17);
+            cascade_filters(filter17, filter18);
+            cascade_filters(filter18, filter19);
+            cascade_filters(filter19, filter20);
+            cascade_filters(filter20, filter21);
+            cascade_filters(filter21, filter22);
+            cascade_filters(filter22, filter23);
+            cascade_filters(filter23, filter24);
+            cascade_filters(filter24, filter25);
+            cascade_filters(filter25, filter26);
+            cascade_filters(filter26, filter27);
+            cascade_filters(filter27, filter28);
+            cascade_filters(filter28, filter29);
+            cascade_filters(filter29, filter30);
 
-            if filter_is_ready(filter2) then
-                transmit_16_bit_word_with_uart(uart_data_in, get_filter_output(filter2));
+            if filter_is_ready(filter30) then
+                transmit_16_bit_word_with_uart(uart_data_in, get_filter_output(filter30));
             end if;
 
 

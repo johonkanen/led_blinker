@@ -9,27 +9,23 @@ library work;
 library vunit_lib;
     use vunit_lib.run_pkg.all;
 
-entity tb_filter is
+entity tb_multiplier is
   generic (runner_cfg : string);
 end;
 
-architecture vunit_simulation of tb_filter is
+architecture vunit_simulation of tb_multiplier is
 
     signal simulation_running : boolean;
     signal simulator_clock : std_logic;
     constant clock_per : time := 1 ns;
     constant clock_half_per : time := 0.5 ns;
-    constant simtime_in_clocks : integer := 1350;
+    constant simtime_in_clocks : integer := 50;
 
     signal simulation_counter : natural := 0;
     -----------------------------------
     -- simulation specific signals ----
-
-
-    signal filter_multiplier : multiplier_record := init_multiplier;
-    signal filter : filter_record := init_filter; 
-    signal filter2 : filter_record := init_filter; 
-    signal output_from_filter : integer := 0;
+    signal multiplier : multiplier_record := init_multiplier;
+    signal multiplier_result : integer := 0;
 
 begin
 
@@ -63,27 +59,14 @@ begin
         if rising_edge(simulator_clock) then
             simulation_counter <= simulation_counter + 1;
 
-            create_multiplier(filter_multiplier);
-            create_filter(filter, filter_multiplier);
-            create_filter(filter2, filter_multiplier);
+            create_multiplier(multiplier);
 
-
-
-            -- if simulation_counter = 5 then
-            --     set_filter_constant(filter, 20e3);
-            -- end if;
-
-            if simulation_counter = 0 then
-                request_filter(filter, 44252);
+            if simulation_counter >= 5 and simulation_counter <= 15 then
+                request_multiplier(multiplier, -simulation_counter, 2**16);
             end if;
 
-            if filter_is_ready(filter) then
-                request_filter(filter2, get_filter_output(filter));
-            end if;
-
-            if filter_is_ready(filter2) then
-                output_from_filter <= get_filter_output(filter2);
-                request_filter(filter, 44252);
+            if multiplier_is_ready(multiplier) then
+                multiplier_result <= get_multiplier_result(multiplier, 16);
             end if;
 
 
